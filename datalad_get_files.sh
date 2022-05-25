@@ -12,7 +12,7 @@ main() {
     if [ -z "$subj_ls" ]; then
         subjects=( $(find . -maxdepth 1 -type d -name "sub-NDARINV*" -exec basename {} \;) )
     else
-        subjects=( $(cat $subj_ls) )
+        subjects=$(cat $subj_ls)
     fi
     echo $subjects
 
@@ -28,14 +28,14 @@ main() {
 
         # generate file lists necessary for fmriprep
         if [ "$json_only" == "1" ]; then
-            flist="anat/${sid}_${ses}_T1w.json anat/${sid}_${ses}_T2w.json \
-dwi/${sid}_${ses}_dwi.json fmap/${sid}_${ses}_acq-dwi_dir-AP_epi.json"
+            flist="anat/${sid}_${ses}_*T1w.json anat/${sid}_${ses}_*T2w.json \
+dwi/${sid}_${ses}_dwi.json fmap/${sid}_${ses}_acq-dwi_dir-*_epi.json"
         else
-            flist="anat/${sid}_${ses}_T1w.json anat/${sid}_${ses}_T2w.json dwi/${sid}_${ses}_dwi.json \
-fmap/${sid}_${ses}_acq-dwi_dir-AP_epi.json anat/${sid}_${ses}_*T1w.nii.gz anat/${sid}_${ses}_*T2w.nii.gz"
+            flist="anat/${sid}_${ses}_*T1w.json anat/${sid}_${ses}_*T2w.json dwi/${sid}_${ses}_dwi.json \
+fmap/${sid}_${ses}_acq-dwi_dir-*_epi.json anat/${sid}_${ses}_*T1w.nii.gz anat/${sid}_${ses}_*T2w.nii.gz"
         fi
 
-        for run in {01..04}; do # maximal 4 fMRI runs
+        for run in {01..05}; do # maximal 4 fMRI runs
             if [ -L $sid/$ses/func/${sid}_${ses}_task-rest_run-${run}_bold.nii.gz ]; then
                 flist="$flist func/${sid}_${ses}_task-rest_run-${run}_bold.json"
                 if [ "$json_only" != "0" ]; then
@@ -63,7 +63,7 @@ DESCRIPTION:
 ARGUMENTS:
     -h            : Print help.
     -d <data_dir> : BIDS directory of original dataset. Default:
-                    $
+                    $data_dir
     -s <subj_ls>  : Absolute path of subject list.
     -a            : If this flag is not used, only .json files will be downloaded. If used, NIFTI files 
                     will also be downloaded.
@@ -77,7 +77,7 @@ while [[ $# -gt 0 ]]; do
         -h) usage; exit;;
         -d) data_dir=$1; shift;;
         -s) subj_ls=$1; shift;;
-        -a) json_only=0; shift;;
+        -a) json_only=1; ;;
         *) echo "Unknown flag: $flag"
            usage; 1>&2; exit 1;;
     esac
