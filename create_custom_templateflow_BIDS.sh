@@ -8,9 +8,9 @@ age_max="12"
 
 for eth in AA EA; do
     mkdir -p $TPL_DIR/tpl-PNC${eth}${age_min}${age_max}
-    ln -s $PNCtpl_dir/Template_${age_min}${age_max}${eth}/age${age_min}-${age_max}_${eth}.nii \
+    gzip -c $PNCtpl_dir/Template_${age_min}${age_max}${eth}/age${age_min}-${age_max}_${eth}.nii > \
         $TPL_DIR/tpl-PNC${eth}${age_min}${age_max}/tpl-PNC${eth}${age_min}${age_max}_res-01_T1w.nii.gz
-    ln -s $PNCtpl_dir/Template_${age_min}${age_max}${eth}/age${age_min}-${age_max}_${eth}_brainmask.nii \
+    gzip -c $PNCtpl_dir/Template_${age_min}${age_max}${eth}/age${age_min}-${age_max}_${eth}_brainmask.nii > \
         $TPL_DIR/tpl-PNC${eth}${age_min}${age_max}/tpl-PNC${eth}${age_min}${age_max}_res-01_desc-brain_mask.nii.gz
 
     flirt -in $TPL_DIR/tpl-PNC${eth}${age_min}${age_max}/tpl-PNC${eth}${age_min}${age_max}_res-01_T1w.nii.gz \
