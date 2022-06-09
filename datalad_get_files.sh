@@ -29,13 +29,19 @@ main() {
         # generate file lists necessary for fmriprep
         if [ "$json_only" == "1" ]; then
             flist="anat/${sid}_${ses}_*T1w.json anat/${sid}_${ses}_*T2w.json \
-dwi/${sid}_${ses}_dwi.json fmap/${sid}_${ses}_acq-dwi_dir-*_epi.json"
+dwi/${sid}_${ses}_*dwi.json fmap/${sid}_${ses}_acq-dwi_dir-*_epi.json"
         else
             flist="anat/${sid}_${ses}_*T1w.json anat/${sid}_${ses}_*T2w.json dwi/${sid}_${ses}_dwi.json \
 fmap/${sid}_${ses}_acq-dwi_dir-*_epi.json anat/${sid}_${ses}_*T1w.nii.gz anat/${sid}_${ses}_*T2w.nii.gz"
         fi
 
-        for run in {01..05}; do # maximal 4 fMRI runs
+        if [ -L $sid/$ses/func/${sid}_${ses}_task-rest_bold.nii.gz ]; then
+            flist="$flist func/${sid}_${ses}_task-rest_bold.json"
+            if [ "$json_only" != "0" ]; then
+                flist="$flist func/${sid}_${ses}_task-rest_bold.nii.gz"
+            fi
+        fi
+        for run in {01..06}; do # maximal 4 fMRI runs
             if [ -L $sid/$ses/func/${sid}_${ses}_task-rest_run-${run}_bold.nii.gz ]; then
                 flist="$flist func/${sid}_${ses}_task-rest_run-${run}_bold.json"
                 if [ "$json_only" != "0" ]; then
