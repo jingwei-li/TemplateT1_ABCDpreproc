@@ -12,7 +12,8 @@ for eth in AA EA; do
     # 1mm as resolution 1
     gzip -c $PNCtpl_dir/Template_${age_min}${age_max}${eth}/age${age_min}-${age_max}_${eth}_1mm.nii > \
         $TPL_DIR/tpl-PNC${eth}${age_min}${age_max}/tpl-PNC${eth}${age_min}${age_max}_res-01_T1w.nii.gz
-    gzip -c $PNCtpl_dir/Template_${age_min}${age_max}${eth}/age${age_min}-${age_max}_${eth}_brainmask.nii > \
+    python3 calculate_mask_1mm.py $PNCtpl_dir/Template_${age_min}${age_max}${eth}/age${age_min}-${age_max}_${eth}_1mm.nii \
+        $PNCtpl_dir/Template_${age_min}${age_max}${eth}/age${age_min}-${age_max}_${eth}_1mm_brain.nii \
         $TPL_DIR/tpl-PNC${eth}${age_min}${age_max}/tpl-PNC${eth}${age_min}${age_max}_res-01_desc-brain_mask.nii.gz
 
     # 1.5mm as resolution 2
