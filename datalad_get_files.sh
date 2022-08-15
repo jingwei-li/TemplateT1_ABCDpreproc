@@ -83,7 +83,7 @@ while [[ $# -gt 0 ]]; do
         -h) usage; exit;;
         -d) data_dir=$1; shift;;
         -s) subj_ls=$1; shift;;
-        -a) json_only=1; ;;
+        -a) json_only=0; ;;
         *) echo "Unknown flag: $flag"
            usage; 1>&2; exit 1;;
     esac
