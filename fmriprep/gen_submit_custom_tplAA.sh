@@ -14,7 +14,7 @@ BIDS_DIR="$proj_dir/data/ABCD_datalad/inm7-superds/original/abcd"
 OUTPUT_DIR="$proj_dir/data/ABCD_datalad/preprocessed/PNCAA912"
 
 TPL_DIR="$proj_dir/child/data/T1/TemplateFlow"
-subj_ls="$proj_dir/data/ABCD_datalad/code/TemplateT1_ABCDpreproc/lists/subj_ls_all_rand50AA.txt"
+subj_ls="$proj_dir/data/ABCD_datalad/code/TemplateT1_ABCDpreproc/lists/subj_ls_all_rand50EA50AA.txt"
 
 # create the logs dir if it doesn't exist
 [ ! -d "${LOGS_DIR}" ] && mkdir -p "${LOGS_DIR}"
