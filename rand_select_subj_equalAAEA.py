@@ -36,6 +36,7 @@ for item in EA:
 for item in AA:
     item = 'sub-' + item[0:4] + item[5:]
     AAnew.append(item)
+all_new = EAnew + AAnew
 
 # write subject IDs into two separate text files
 if not os.path.exists(args.outdir):
@@ -43,9 +44,14 @@ if not os.path.exists(args.outdir):
 basename = os.path.splitext(args.subj_ls)[0]
 EA_ls = os.path.join(args.outdir, basename + '_rand' + str(args.N) + 'EA.txt')
 AA_ls = os.path.join(args.outdir, basename + '_rand' + str(args.N) + 'AA.txt')
+full_ls = os.path.join(args.outdir, basename + '_rand' + str(args.N) + 'EA' + str(args.N) + 'AA.txt')
 with open(EA_ls, 'w') as f:
     for item in EAnew:
         f.write("%s\n" % item)
 with open(AA_ls, 'w') as f:
     for item in AAnew:
+        f.write("%s\n" % item)
+
+with open(full_ls, 'w') as f:
+    for item in all_new:
         f.write("%s\n" % item)
