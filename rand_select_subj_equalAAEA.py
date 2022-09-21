@@ -41,7 +41,7 @@ all_new = EAnew + AAnew
 # write subject IDs into two separate text files
 if not os.path.exists(args.outdir):
     os.mkdir(args.outdir)
-basename = os.path.splitext(args.subj_ls)[0]
+basename = os.path.basename(os.path.splitext(args.subj_ls)[0])
 EA_ls = os.path.join(args.outdir, basename + '_rand' + str(args.N) + 'EA.txt')
 AA_ls = os.path.join(args.outdir, basename + '_rand' + str(args.N) + 'AA.txt')
 full_ls = os.path.join(args.outdir, basename + '_rand' + str(args.N) + 'EA' + str(args.N) + 'AA.txt')
