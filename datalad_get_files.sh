@@ -5,14 +5,19 @@ data_dir='/data/project/template_t1/data/ABCD_datalad/inm7-superds/original/abcd
 #     all NIFTI files which takes too much space
 json_only=1
 subj_ls=""
+s=""
 
 main() {
     cd $data_dir
     # get subject IDs
-    if [ -z "$subj_ls" ]; then
-        subjects=( $(find . -maxdepth 1 -type d -name "sub-NDARINV*" -exec basename {} \;) )
+    if [ -z "$s" ]; then
+        if [ -z "$subj_ls" ]; then
+            subjects=( $(find . -maxdepth 1 -type d -name "sub-NDARINV*" -exec basename {} \;) )
+        else
+            subjects=$(cat $subj_ls)
+        fi
     else
-        subjects=$(cat $subj_ls)
+        subjects=($s)
     fi
     echo $subjects
 
@@ -55,6 +60,10 @@ fmap/${sid}_${ses}_acq-dwi_dir-*_epi.json anat/${sid}_${ses}_*T1w.nii.gz anat/${
         for f in $flist; do
             eval "$cmd $sid/$ses/$f"
         done
+
+        # change git confit file so that it looks only into inm7-storage but not to the NDA remote
+        # for the later purpose of datalad uninstall command
+        git -C $sid config --local --add remote.datalad.annex-ignore true
     done
 }
 
@@ -70,7 +79,9 @@ ARGUMENTS:
     -h            : Print help.
     -d <data_dir> : BIDS directory of original dataset. Default:
                     $data_dir
-    -s <subj_ls>  : Absolute path of subject list.
+    -l <subj_ls>  : Absolute path of subject list. (optional)
+    -s <sub_id>   : A single subject ID. (Optional. If -l option is not used, then a single subject ID
+                    must be passed in.)
     -a            : If this flag is not used, only .json files will be downloaded. If used, NIFTI files 
                     will also be downloaded.
 " 1>&2; exit 1; }
@@ -82,23 +93,13 @@ while [[ $# -gt 0 ]]; do
     case $flag in
         -h) usage; exit;;
         -d) data_dir=$1; shift;;
-        -s) subj_ls=$1; shift;;
+        -l) subj_ls=$1; shift;;
+        -s) s=$1; shift;;
         -a) json_only=0; ;;
         *) echo "Unknown flag: $flag"
            usage; 1>&2; exit 1;;
     esac
 done
 
-arg1err() {
-	echo "ERROR: flag $1 requires one argument"
-	exit 1
-}
-
-if [ -z "$data_dir" ]; then
-	arg1err "-d"
-fi
-if [ -z "$subj_ls" ]; then
-	arg1err "-s"
-fi
 
 main
