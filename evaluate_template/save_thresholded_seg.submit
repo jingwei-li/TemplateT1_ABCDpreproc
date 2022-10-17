@@ -1,0 +1,17 @@
+# The environment
+universe              = vanilla
+getenv                = True
+request_cpus          = 1
+request_memory        = 5G
+
+# Execution
+initialdir            = /data/project/template_t1/data/ABCD_datalad/code/TemplateT1_ABCDpreproc/evaluate_template
+executable            = /usr/bin/python3
+transfer_executable   = False
+
+# Job
+arguments   = save_thresholded_seg.py --subj_ls /data/project/template_t1/data/ABCD_datalad/code/TemplateT1_ABCDpreproc/lists/subj_ls_all_rand50EA50AA_subset10x2.txt --seg_dir /data/project/template_t1/data/ABCD_datalad/tissue_seg/seg_individual_native --reg_dir /data/project/template_t1/data/ABCD_datalad/tissue_seg/templateTPMs_to_native
+log         = /data/project/template_t1/data/ABCD_datalad/code/logs/save_thresholded_seg/$(Cluster).$(Process).log
+output      = /data/project/template_t1/data/ABCD_datalad/code/logs/save_thresholded_seg/$(Cluster).$(Process).out
+error       = /data/project/template_t1/data/ABCD_datalad/code/logs/save_thresholded_seg/$(Cluster).$(Process).err
+Queue
