@@ -10,11 +10,13 @@ main() {
     mgz="$in_dir/$s/mri/brain.mgz"
     mkdir -p $out_dir/$s
     nii="$out_dir/$s/reconall_brain.nii.gz"
-    mri_convert $mgz $nii
+    if [ ! -f $nii ]; then
+        mri_convert $mgz $nii
+    fi
 
     # fast
     base=$out_dir/$s/reconall_brain_fast
-    fast -o ${base} -n 3 $nii
+    fast -g -o ${base} -n 3 $nii 
 }
 
 
