@@ -4,21 +4,28 @@ DIR="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 main() {
     mkdir -p $out_dir
 
+    in=$TPMdir/age9-12_${grp}_brain.nii
+    ref=$ref_dir/reconall_brain.nii.gz
+    # flirt
+    aff=$out_dir/flirt_affine.mat
+    if [ ! -f $aff ] ; then
+        flirt -ref $ref -in $in -omat $aff
+    fi
+
+    # fnirt
+    cnf=$DIR/fnirt_template2native.cnf
+    cout=$out_dir/age9-12_${grp}_brain_warpcoef.nii.gz
+    if [ ! -f $cout ]; then
+        fnirt --in=$in --ref=$ref --aff=$aff --cout=$cout --config=$cnf -v
+    fi
+
     # loop over white matter, grey matter, and CSF
     for tissue in 1 2 3; do
         in=$TPMdir/age9-12_${grp}_TMP${tissue}.nii
-        ref=$ref_dir/reconall_brain.nii.gz
-
-        # flirt
-        aff=$out_dir/flirt_affine.mat
-        flirt -ref $ref -in $in -omat $aff
-
-        # fnirt
+        
+        # applywarp
         iout=$out_dir/age9-12_${grp}_TMP${tissue}_to_reconall_brain.nii.gz
-        cout=$out_dir/age9-12_${grp}_TMP${tissue}_warpcoef.nii.gz
-        fout=$out_dir/age9-12_${grp}_TMP${tissue}_warpfield.nii.gz
-        cnf=$DIR/fnirt_template2native.cnf
-        fnirt --in=$in --ref=$ref --iout=$iout --cout=filename --fout=$fout --aff=$aff --config=$cnf -v
+        applywarp --ref=$ref --in=$in --warp=$cout --out=$iout
     done
 }
 
